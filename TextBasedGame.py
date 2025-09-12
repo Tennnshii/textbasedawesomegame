@@ -1,3 +1,13 @@
+from pyfiglet import Figlet
+
+
+def create_and_print_ascii_art(enter_characters):
+    f = Figlet(font="slant")
+    ascii_art = f.renderText(enter_characters)
+    print(ascii_art)
+
+create_and_print_ascii_art("NO MAN'S LAND")
+
 player_name = "Rudeus"
 player_hp = 100
 player_attack = 15
@@ -27,11 +37,14 @@ def slash(playerAttack, player_mp, enemyHP):
 
 
 
-playerinput = int(input("Press 1 to attack,\n2 to slash. "))
 
-if playerinput == 1: 
-    enemy_hp = player_attacks_enemy (player_attack, enemy_hp)
-elif playerinput == 2:
-    enemy_hp = slash(player_attack, player_mp, enemy_hp)
-else: 
-    print("Invalid Entry")
+while player_hp > 0 and enemy_hp > 0:
+    playerinput = int(input("1 - Attack\n2 - Slash\n"))
+    if playerinput == 1: 
+        enemy_hp = player_attacks_enemy (player_attack, enemy_hp)
+        create_and_print_ascii_art("l")
+    elif playerinput == 2:
+        enemy_hp = slash(player_attack, player_mp, enemy_hp)
+        create_and_print_ascii_art("X")
+    else: 
+        print("Invalid Entry")
