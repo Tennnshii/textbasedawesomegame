@@ -1,40 +1,33 @@
-class Stats:
-    def __init__(self, health=100, mana=50, strength=10, agility=10):
-        self.health = health
-        self.mana = mana
-        self.strength = strength
-        self.agility = agility
-
-    def display_stats(self):
-        return f"Health: {self.health}, Mana: {self.mana}, Strength: {self.strength}, Agility: {self.agility}"
+from Characters import Character
+from Damage import DamageType
 
 
-class Player:
-    def __init__(self, name, stats=None):
-        self.name = name
-        self.stats = stats if stats else Stats()
-
-    def attack(self, enemy):
+class Player(Character):
+    def attack(self, target: Character):
+        """Basic PHYSICAL attack."""
         damage = self.stats.strength
-        enemy.stats.health -= damage
-        if enemy.stats.health < 0:
-            enemy.stats.health = 0
-        print(f"{self.name} attacked {enemy.name} for {damage} damage!")
-        if enemy.stats.health == 0:
-            print(f"{enemy.name} is dead!")
+        print(f"{self.name} attacks ({damage} base).")
+        target.take_damage(damage, DamageType.PHYSICAL)
 
-    def slash(self, enemy):
-        if self.stats.mana >= 10:
-            damage = int(self.stats.strength * 1.25)
-            enemy.stats.health -= damage
-            self.stats.mana -= 10
-            if enemy.stats.health < 0:
-                enemy.stats.health = 0
-            print(f"{self.name} used Slash! {enemy.name} took {damage} damage!")
-            if enemy.stats.health == 0:
-                print(f"{enemy.name} is dead!")
-        else:
-            print(f"{self.name} does not have enough mana to use Slash!")
+    def slash(self, target: Character):
+        """Stronger PHYSICAL hit (1.25x), costs 10 MP."""
+        if self.stats.mana < 10:
+            print("Not enough MP for Slash!")
+            return
+        self.stats.mana -= 10
+        damage = int(self.stats.strength * 1.25)
+        print(f"{self.name} uses Slash ({damage} base). MP:{self.stats.mana}")
+        target.take_damage(damage, DamageType.PHYSICAL)
 
-    def display_stats(self):
-        return f"{self.name}'s Stats -> {self.stats.display_stats()}"
+    def fireball(self, target: Character):
+        """MAGIC fire spell; flat + scaling damage, costs 12 MP."""
+        if self.stats.mana < 12:
+            print("Not enough MP for Fireball!")
+            return
+        self.stats.mana -= 12
+        damage = int(20 + self.stats.strength * 0.8)
+        print(
+            f"{self.name} casts Fireball ({damage} base). "
+            f"MP:{self.stats.mana}"
+        )
+        target.take_damage(damage, DamageType.FIRE)
