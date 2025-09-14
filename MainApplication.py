@@ -28,7 +28,10 @@ def main() -> None:
     title_screen("NO MAN'S LAND")
 
     # Create player
-    player = Player("Rudeus", Stats(health=100, mana=50, strength=15, agility=10))
+    player = Player(
+        "Rudeus",
+        Stats(health=100, mana=50, strength=15, agility=10)
+    )
 
     # Enemy: 30% resistant to PHYSICAL (multiplier 0.7)
     slime_resists = {DamageType.PHYSICAL: 0.7}
